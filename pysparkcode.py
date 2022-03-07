@@ -1,26 +1,23 @@
 #from boto3 import client
-from awsglue.context import GlueContext
-from pyspark.context import SparkContext
-from pyspark import SparkConf
+
+from pyspark import SparkContext
 from pyspark.sql import SparkSession
-
-sc = SparkContext()
-glueContext = GlueContext(sc)
-logger = glueContext.get_logger()
-
-logger.warn("warn message")
-logger.error("error message")
-
-my_conf = SparkConf()
-my_conf.set("spark.app.name","myfirstapplication")
+from pyspark import SparkConf
 
 
-spark = SparkSession.builder.config(conf=my_conf).getOrCreate()
+spark = SparkSession.builder.appName('sparkdf').getOrCreate()
 
-data = [1,2,3,4,5,6,7,8,9,10]
-rdd = spark.sparkContext.parallelize(data)
+# list  of college data with two lists
+data = [["java", "dbms", "python"],
+        ["Spark", "SQL", "Machine Learning"]]
 
-logger.info(rdd.collect())
+# giving column names of dataframe
+columns = ["Subject 1", "Subject 2", "Subject 3"]
 
-spark.stop()
+# creating a dataframe
+dataframe = spark.createDataFrame(data, columns)
+
+# show data frame
+dataframe.show()
+
 
